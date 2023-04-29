@@ -35,7 +35,7 @@ class _GamificationState extends State<Gamification> {
           ],
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 80),
+          padding: const EdgeInsets.only(top: 40),
           child: SizedBox(
             width: 150,
             height: 150,
@@ -43,7 +43,7 @@ class _GamificationState extends State<Gamification> {
               alignment: Alignment.center,
               children: [
                 Text(
-                  "${(avgScore * 10).round()}",
+                  "${(avgScore * 10).round()}%",
                   style: const TextStyle(
                       color: Color.fromARGB(255, 86, 193, 245),
                       fontWeight: FontWeight.bold,
@@ -63,40 +63,64 @@ class _GamificationState extends State<Gamification> {
             ),
           ),
         ),
-        Column(
-          children: const [
-            Tips("Tip 1"),
-            Tips("Tip 2"),
-            Tips("Tip 3")
-          ],
-        )
+        
+        Padding(
+          padding: const EdgeInsets.only(top: 40), // Add padding here
+          child: Column(
+            children: const [
+              Tips("Tip 1: Emails x AI"),
+              Tips("Tip 2: Process Optimisation"),
+              Tips("Tip 3: Family scheduling")
+           ],
+          )
+        ),
       ],
     );
   }
 }
 
-class Tips extends StatelessWidget {
+class Tips extends StatefulWidget {
   const Tips(this.text, {Key? key}) : super(key: key);
   final String text;
+
+  @override
+  _TipsState createState() => _TipsState();
+}
+
+class _TipsState extends State<Tips> {
+  bool _isHovering = false;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: const Color.fromARGB(255, 86, 193, 245),
-            width: 5,
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        onEnter: (_) => setState(() => _isHovering = true),
+        onExit: (_) => setState(() => _isHovering = false),
+        child: Container(
+          height: 50.0, // Define the height
+          width: 270.0, // Define the width
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: _isHovering
+                  ? Colors.blue
+                  : const Color.fromARGB(255, 86, 193, 245),
+              width: 3,
+            ),
           ),
-        ),
-        child: Text(
-          text,
-          style: const TextStyle(
-              color: Colors.black54,
-              fontWeight: FontWeight.bold,
-              fontFamily: "Lato",
-              fontSize: 15),
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Text(
+              widget.text,
+              style: const TextStyle(
+                  color: Colors.black54,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: "Lato",
+                  fontSize: 15),
+            ),
+          ),
         ),
       ),
     );

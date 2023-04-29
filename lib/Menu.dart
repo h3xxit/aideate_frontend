@@ -78,37 +78,53 @@ class Menu extends StatelessWidget {
   }
 }
 
-class MenuItem extends StatelessWidget {
+class MenuItem extends StatefulWidget {
   const MenuItem({required this.icon, required this.text, Key? key})
       : super(key: key);
   final IconData icon;
   final String text;
 
   @override
+  _MenuItemState createState() => _MenuItemState();
+}
+
+class _MenuItemState extends State<MenuItem> {
+  bool _isHovering = false;
+
+  @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Icon(
-            icon,
-            size: 20,
-            color: Colors.black54,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: SizedBox(
-            width: 80,
-            child: Text(
-              text,
-              style: const TextStyle(
-                  color: Colors.black54, fontWeight: FontWeight.bold, fontFamily: "Lato", fontSize: 15),
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onEnter: (_) => setState(() => _isHovering = true),
+      onExit: (_) => setState(() => _isHovering = false),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Icon(
+              widget.icon,
+              size: 20,
+              color: _isHovering ? Colors.blue : Colors.black54,
             ),
           ),
-        ),
-      ],
+          Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: SizedBox(
+              width: 80,
+              child: Text(
+                widget.text,
+                style: TextStyle(
+                    color: _isHovering ? Colors.blue : Colors.black54,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: "Lato",
+                    fontSize: 15),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
+
