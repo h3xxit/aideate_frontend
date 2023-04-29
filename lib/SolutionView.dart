@@ -29,10 +29,32 @@ class _SolutionViewState extends State<SolutionView> {
           ),
         );
   }
+
+
+
+
+  void addChat(List<Widget> widgets) {
+    List<Widget> tmp = List.of(childList);
+    for (Widget widget in widgets) {
+      tmp.insert(
+          0,
+          Container(
+            padding: EdgeInsets.fromLTRB(
+                0, 0, 0, MediaQuery.of(context).size.height / 20),
+            child: widget,
+          ));
+      setState(() {
+        childList = tmp;
+      });
+    }
+  }
+
+
+  
+
+
+
 }
-
-
-
 
 class SolutionText extends StatelessWidget {
   const SolutionText(this.solutionText, {super.key});
@@ -45,7 +67,7 @@ class SolutionText extends StatelessWidget {
       child: ChatMessage(
         isAi: false,
         child: Text(
-          widget.solutionText,
+          solutionText,
           style: const TextStyle(
               color: Colors.black,
               fontFamily: "Lato",
