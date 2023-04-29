@@ -67,7 +67,7 @@ class _GamificationState extends State<Gamification> {
           children: const [
             Tips("Tip 1"),
             Tips("Tip 2"),
-            Tips("Tip 3")
+            Tips("Tip 3"),
           ],
         )
       ],

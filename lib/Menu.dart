@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class Menu extends StatelessWidget {
-  const Menu({Key? key}) : super(key: key);
+  const Menu(this.changePage, {Key? key}) : super(key: key);
+
+  final void Function(int) changePage;
 
   @override
   Widget build(BuildContext context) {
@@ -64,12 +66,27 @@ class Menu extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(top: 80),
           child: Column(
-            children: const [
-              MenuItem(icon: Icons.power_settings_new, text: "Dashboard"),
-              MenuItem(icon: Icons.chat_bubble_rounded, text: "Chats"),
-              MenuItem(icon: Icons.calendar_today_outlined, text: "Schedule"),
-              MenuItem(icon: Icons.settings, text: "Settings"),
-              MenuItem(icon: Icons.query_builder, text: "History"),
+            children: [
+              GestureDetector(
+                onTap: () {changePage(0); print("Switched");},
+                child: MenuItem(icon: Icons.power_settings_new, text: "Dashboard"),
+              ),
+              GestureDetector(
+                onTap: () {changePage(1); print("Switched");},
+                child: MenuItem(icon: Icons.chat_bubble_rounded, text: "Chats"),
+              ),
+              GestureDetector(
+                onTap: () {changePage(2); print("Switched");},
+                child: MenuItem(icon: Icons.check_box, text: "Solution"),
+              ),
+              GestureDetector(
+                onTap: () {},
+                child: MenuItem(icon: Icons.settings, text: "Settings"),
+              ),
+              GestureDetector(
+                onTap: () {},
+                child: MenuItem(icon: Icons.query_builder, text: "History"),
+              ),
             ],
           ),
         ),
