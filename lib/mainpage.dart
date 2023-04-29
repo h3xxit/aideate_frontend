@@ -16,14 +16,37 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  List<Widget> tabs = [Dashboard(), ChatListView(), SolutionView()];
-  int selectedTab = 2;
+
+  int selectedTab = 1;
+  int? sessionId;
+
+  Widget tabs(int selected) {
+    switch(selected){
+      case 0:
+        return Dashboard();
+      case 1:
+        return ChatListView(sessionId, setSessionId);
+      case 2:
+        return SolutionView(sessionId);
+      default:
+        return ChatListView(sessionId, setSessionId);
+    }
+  }
+
+  void setSessionId(int sessionId) {
+    setState(() {
+      this.sessionId = sessionId;
+    });
+  }
 
   void setSelectedTab(int tabNumber) {
     setState(() {
-      selectedTab = tabNumber;
+      if(sessionId == null && selectedTab == 2) {
+        selectedTab = 1;
+      } else {
+        selectedTab = tabNumber;
+      }
     });
-    print(tabNumber);
   }
 
   @override
@@ -40,7 +63,7 @@ class _MainPageState extends State<MainPage> {
               Flexible(flex: 20, child: Menu(setSelectedTab)),
               Flexible(
                 flex: (selectedTab == 1 ? 55 : 80),
-                child: tabs[selectedTab],
+                child: tabs(selectedTab),
               ),
             ] +
             (selectedTab == 1
