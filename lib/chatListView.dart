@@ -6,13 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:watchat_ui/common/MessageDto.dart';
 import 'package:watchat_ui/controller/reqController.dart';
 import 'package:watchat_ui/design/fontSizes.dart';
-import 'package:watchat_ui/movieDetailView.dart';
 import 'package:watchat_ui/widgets/chatMessage.dart';
 
 class ChatListView extends StatefulWidget {
+  final int? sessionId;
   int count = 0;
+  final void Function(int) changeSessionId;
 
-  ChatListView({super.key});
+  ChatListView(this.sessionId, this.changeSessionId, {super.key});
 
   @override
   State<ChatListView> createState() => _ChatListViewState();
@@ -24,7 +25,6 @@ class _ChatListViewState extends State<ChatListView>
   final TextEditingController txtController = TextEditingController();
   String hintText = "Insert text here to start getting recommendations...";
   bool startedConversation = false;
-  int? sessionId;
   bool blocked = false;
 
   @override
@@ -101,7 +101,7 @@ class _ChatListViewState extends State<ChatListView>
                         submitText(txtController.text);
                       },
                       child: Text(
-                        sessionId?.toString() ?? "Submit",
+                        widget.sessionId?.toString() ?? "Submit",
                         style: TextStyle(
                             color: Colors.black,
                             fontFamily: "Lato",
@@ -173,9 +173,7 @@ class _ChatListViewState extends State<ChatListView>
         });
         return;
       }
-      setState(() {
-        sessionId = response.sessionId;
-      });
+      widget.changeSessionId(response.sessionId);
       addChat([AnswerField(response.text)]);
     } on Exception catch (_) {
     } finally {
@@ -187,28 +185,25 @@ class _ChatListViewState extends State<ChatListView>
 
   void getTextResponse(String t) async {
     try {
-      if (sessionId == null) {
+      if (widget.sessionId == null) {
         initializeConsultant();
       }
       setState(() {
         blocked = true;
       });
       MessageDto? response =
-          await ReqController.postResponse(MessageDto(t, sessionId!));
+          await ReqController.postResponse(MessageDto(t, widget.sessionId!));
       await Future.delayed(const Duration(milliseconds: 1000));
       if (response == null) {
         addChat([
-          AnswerField(
-              "There seems to have been a problem, please repeat your answer")
+          AnswerField("There seems to have been a problem, please repeat your answer")
         ]);
         setState(() {
           blocked = false;
         });
         return;
       }
-      setState(() {
-        sessionId = response.sessionId;
-      });
+      widget.changeSessionId(response.sessionId);
       addChat([AnswerField(response.text)]);
     } on Exception catch (_) {
     } finally {

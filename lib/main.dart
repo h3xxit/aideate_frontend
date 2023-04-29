@@ -2,7 +2,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:watchat_ui/controller/reqController.dart';
 import 'package:watchat_ui/mainpage.dart';
-import 'package:watchat_ui/resultGallery.dart';
 
 void main() {
   runApp(const MyApp());

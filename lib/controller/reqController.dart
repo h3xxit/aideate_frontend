@@ -51,4 +51,45 @@ class ReqController {
       return null;
     }
   }
+
+  static Future<Object?> getSolution(int sessionId) async {
+    late final http.Response response;
+    try {
+      response = await http.get(Uri.parse('$apiURL/generate-solution?sessionID=$sessionId'),
+          headers: <String, String>{
+            'Content-Type': 'application/json',
+          });
+    } catch (e) {
+      print(e);
+      return null;
+    }
+
+    if (response.statusCode == 200) {
+      dynamic res =
+      json.decode(const Utf8Decoder().convert(response.bodyBytes));
+
+      return res;
+    } else {
+      return null;
+    }
+  }
+
+  static Future<int?> getRating(int sessionId) async {
+    late final http.Response response;
+    try {
+      response = await http.get(Uri.parse('$apiURL/generate-solution?sessionID=$sessionId'),
+          headers: <String, String>{
+            'Content-Type': 'text/plain',
+          });
+    } catch (e) {
+      print(e);
+      return null;
+    }
+
+    if (response.statusCode == 200) {
+      return int.parse(const Utf8Decoder().convert(response.bodyBytes));
+    } else {
+      return null;
+    }
+  }
 }
