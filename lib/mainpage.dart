@@ -14,6 +14,16 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  List<Widget> tabs = [ChatListView(), ChatListView(), ChatListView()];
+  int selectedTab = 2;
+
+  void setSelectedTab(int tabNumber) {
+    setState(() {
+      selectedTab = tabNumber;
+    });
+    print(tabNumber);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(children: [
@@ -25,16 +35,16 @@ class _MainPageState extends State<MainPage> {
       ),
       Row(
         children: [
-          const Flexible(
-            flex: 20,
-            child: Menu()
+          Flexible(
+            flex: (MediaQuery.of(context).size.width < 600 ? 0 : 20),
+            child: Menu(setSelectedTab)
           ),
           Flexible(
             flex: 55,
-            child: ChatListView(),
+            child: tabs[selectedTab],
           ),
-          const Flexible(
-            flex: 25,
+          Flexible(
+            flex: (MediaQuery.of(context).size.width < 600 ? 0 : 25),
             child: Gamification(),
           )
         ],
