@@ -4,8 +4,8 @@ import 'package:watchat_ui/common/MessageDto.dart';
 import 'package:http/http.dart' as http;
 
 class ReqController {
-  static String apiURL = "http://localhost:8080";
-  //static String apiURL = "https://aideate.herokuapp.com";
+  //static String apiURL = "http://localhost:8080";
+  static String apiURL = "https://aideate.herokuapp.com";
 
   static Future<MessageDto?> initConsultant() async {
     late final http.Response response;

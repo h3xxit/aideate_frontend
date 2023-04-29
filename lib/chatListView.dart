@@ -254,15 +254,15 @@ class _AnswerFieldState extends State<AnswerField> {
       child: Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
         Flexible(
           child: ChatMessage(
+            isAi: true,
             child: Text(
               widget.answerText,
-              style: TextStyle(
+              style: const TextStyle(
                   color: Colors.black,
                   fontFamily: "Lato",
                   decoration: TextDecoration.none,
-                  fontSize: FontSizes.flexibleNormal(context)),
+                  fontSize: 20),
             ),
-            isAi: true,
           ),
         ),
         Visibility(
@@ -297,16 +297,16 @@ class _QuestionTextState extends State<QuestionText> {
     return Align(
       alignment: Alignment.centerRight,
       child: ChatMessage(
+        isAi: false,
         child: Text(
           widget.questionText,
-          style: TextStyle(
+          style: const TextStyle(
               color: Colors.black,
               fontFamily: "Lato",
               decoration: TextDecoration.none,
-              fontSize: FontSizes.flexibleNormal(context)),
+              fontSize: 20,
         ),
-        isAi: false,
       ),
-    );
+    ));
   }
 }
