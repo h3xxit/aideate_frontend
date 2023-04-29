@@ -44,12 +44,9 @@ class _ChatListViewState extends State<ChatListView>
             reverse: true,
             shrinkWrap: true,
             physics: const BouncingScrollPhysics(),
-            padding: EdgeInsets.fromLTRB(
-                MediaQuery.of(context).size.width / 17,
-                MediaQuery.of(context).size.height / 10,
-                MediaQuery.of(context).size.width / 17,
-                inputHeight),
-            children: List<Widget>.of(blocked ? [AnswerField("...")] : []) + childList,
+            padding: const EdgeInsets.fromLTRB(60, 60, 60, 40),
+            children: List<Widget>.of(blocked ? [AnswerField("...")] : []) +
+                childList,
           ),
         ),
         Align(
@@ -58,72 +55,62 @@ class _ChatListViewState extends State<ChatListView>
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Container(
-                width: 85,
+                width: 60,
               ),
               Container(
-                padding: EdgeInsets.fromLTRB(
-                    0, 0, 0, sqrt(inputHeight) / 50 + inputHeight * 0.1),
-                margin: const EdgeInsets.only(bottom: 10),
-                decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 1,
-                    ),
-                    borderRadius: BorderRadius.circular(20)),
-                width: MediaQuery.of(context).size.width - 300,
-                height: inputHeight,
-                child: Material(
-                  color: Colors.transparent,
-                  child: TextField(
-                    onSubmitted: submitText,
-                    controller: txtController,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontFamily: "Lato",
-                        decoration: TextDecoration.none,
-                        fontSize: FontSizes.flexibleEESmall(context)),
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: hintText,
-                        hintStyle: TextStyle(
-                            color: Colors.black,
-                            fontFamily: "Lato",
-                            decoration: TextDecoration.none,
-                            fontSize: FontSizes.flexibleEESmall(context)),
-                        filled: true,
-                        fillColor: Colors.transparent),
-                  ),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(left: 10, bottom: 10),
-                width: 100,
-                height: inputHeight,
-                decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 1,
-                    ),
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.transparent),
+                margin: const EdgeInsets.only(bottom: 50),
+                width: MediaQuery.of(context).size.width * 0.55 - 230,
+                height: 50,
                 child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: SizedBox(
-                      height: MediaQuery.of(context).size.height / 10,
-                      child: MaterialButton(
-                        onPressed: () {
-                          submitText(txtController.text);
-                        },
-                        child: Text(
-                          sessionId?.toString() ?? "Submit",
-                          style: TextStyle(
+                  borderRadius: BorderRadius.circular(20),
+                  child: SizedBox(
+                    height: 50,
+                    child: TextField(
+                      onSubmitted: submitText,
+                      controller: txtController,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontFamily: "Lato",
+                          decoration: TextDecoration.none,
+                          fontSize: FontSizes.flexibleEESmall(context)),
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: hintText,
+                          hintStyle: TextStyle(
                               color: Colors.black,
                               fontFamily: "Lato",
                               decoration: TextDecoration.none,
                               fontSize: FontSizes.flexibleEESmall(context)),
-                        ),
+                          filled: true,
+                          fillColor: Colors.white),
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(left: 10, bottom: 50),
+                width: 100,
+                height: 50,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: SizedBox(
+                    height: 50,
+                    child: MaterialButton(
+                      color: Colors.white,
+                      onPressed: () {
+                        submitText(txtController.text);
+                      },
+                      child: Text(
+                        sessionId?.toString() ?? "Submit",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: "Lato",
+                            decoration: TextDecoration.none,
+                            fontSize: FontSizes.flexibleEESmall(context)),
                       ),
-                    )),
+                    ),
+                  ),
+                ),
               )
             ],
           ),
@@ -173,7 +160,7 @@ class _ChatListViewState extends State<ChatListView>
     setState(() {
       blocked = true;
     });
-    try{
+    try {
       MessageDto? response = await ReqController.initConsultant();
       await Future.delayed(const Duration(milliseconds: 1000));
       if (response == null) {
@@ -190,13 +177,12 @@ class _ChatListViewState extends State<ChatListView>
         sessionId = response.sessionId;
       });
       addChat([AnswerField(response.text)]);
-    } on Exception catch(_) {
+    } on Exception catch (_) {
     } finally {
       setState(() {
         blocked = false;
       });
     }
-
   }
 
   void getTextResponse(String t) async {
@@ -276,6 +262,7 @@ class _AnswerFieldState extends State<AnswerField> {
                   decoration: TextDecoration.none,
                   fontSize: FontSizes.flexibleNormal(context)),
             ),
+            isAi: true,
           ),
         ),
         Visibility(
@@ -318,6 +305,7 @@ class _QuestionTextState extends State<QuestionText> {
               decoration: TextDecoration.none,
               fontSize: FontSizes.flexibleNormal(context)),
         ),
+        isAi: false,
       ),
     );
   }

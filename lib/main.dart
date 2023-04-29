@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: "Lato",
       ),
-      home: MainPage(),
+      home: const Scaffold(body: MainPage()),
       scrollBehavior: MyCustomScrollBehavior(),
       debugShowCheckedModeBanner: false,
     );
