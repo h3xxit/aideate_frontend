@@ -63,7 +63,6 @@ class _GamificationState extends State<Gamification> {
             ),
           ),
         ),
-<<<<<<< HEAD
         
         Padding(
           padding: const EdgeInsets.only(top: 40), // Add padding here
@@ -75,15 +74,6 @@ class _GamificationState extends State<Gamification> {
            ],
           )
         ),
-=======
-        Column(
-          children: const [
-            Tips("Tip 1"),
-            Tips("Tip 2"),
-            Tips("Tip 3"),
-          ],
-        )
->>>>>>> 3987a1f1efae13293804d56c595dc9ac685fe2b2
       ],
     );
   }
