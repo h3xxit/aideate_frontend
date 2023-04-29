@@ -62,6 +62,7 @@ class SolutionText extends StatelessWidget {
   final String solutionText;
   @override
   Widget build(BuildContext context) {
+    var widget;
     return Align(
       alignment: Alignment.centerRight,
       child: ChatMessage(
