@@ -3,12 +3,11 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:watchat_ui/common/textReqResponse.dart';
+import 'package:watchat_ui/common/MessageDto.dart';
 import 'package:watchat_ui/controller/reqController.dart';
 import 'package:watchat_ui/design/fontSizes.dart';
 import 'package:watchat_ui/movieDetailView.dart';
 import 'package:watchat_ui/widgets/chatMessage.dart';
-
 
 class ChatListView extends StatefulWidget {
   int count = 0;
@@ -31,9 +30,7 @@ class _ChatListViewState extends State<ChatListView>
   @override
   Widget build(BuildContext context) {
     if (!startedConversation) {
-      addChat([
-        AnswerField("Hey, welcome! aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"),
-      ]);
+      initializeConsultant();
       startedConversation = true;
     }
 
@@ -52,7 +49,7 @@ class _ChatListViewState extends State<ChatListView>
                 MediaQuery.of(context).size.height / 10,
                 MediaQuery.of(context).size.width / 17,
                 inputHeight),
-            children: childList,
+            children: List<Widget>.of(blocked ? [AnswerField("...")] : []) + childList,
           ),
         ),
         Align(
@@ -64,7 +61,8 @@ class _ChatListViewState extends State<ChatListView>
                 width: 85,
               ),
               Container(
-                padding: EdgeInsets.fromLTRB(0, 0, 0, sqrt(inputHeight) / 50 + inputHeight * 0.1),
+                padding: EdgeInsets.fromLTRB(
+                    0, 0, 0, sqrt(inputHeight) / 50 + inputHeight * 0.1),
                 margin: const EdgeInsets.only(bottom: 10),
                 decoration: BoxDecoration(
                     border: Border.all(
@@ -168,17 +166,70 @@ class _ChatListViewState extends State<ChatListView>
     getTextResponse(text);
   }
 
-  void getTextResponse(String t) async {
-    MessageDto? response = await ReqController.postResponse(MessageDto(t, sessionId));
-    await Future.delayed(const Duration(milliseconds: 1000));
-    if(response == null) {
-      addChat([AnswerField("There seems to have been a problem, please repeat your answer")]);
+  void initializeConsultant() async {
+    if (blocked) {
       return;
     }
     setState(() {
-      sessionId = response.sessionId;
+      blocked = true;
     });
-    addChat([AnswerField(response.text)]);
+    try{
+      MessageDto? response = await ReqController.initConsultant();
+      await Future.delayed(const Duration(milliseconds: 1000));
+      if (response == null) {
+        addChat([
+          AnswerField(
+              "There seems to have been a problem, please refresh the page")
+        ]);
+        setState(() {
+          blocked = false;
+        });
+        return;
+      }
+      setState(() {
+        sessionId = response.sessionId;
+      });
+      addChat([AnswerField(response.text)]);
+    } on Exception catch(_) {
+    } finally {
+      setState(() {
+        blocked = false;
+      });
+    }
+
+  }
+
+  void getTextResponse(String t) async {
+    try {
+      if (sessionId == null) {
+        initializeConsultant();
+      }
+      setState(() {
+        blocked = true;
+      });
+      MessageDto? response =
+          await ReqController.postResponse(MessageDto(t, sessionId!));
+      await Future.delayed(const Duration(milliseconds: 1000));
+      if (response == null) {
+        addChat([
+          AnswerField(
+              "There seems to have been a problem, please repeat your answer")
+        ]);
+        setState(() {
+          blocked = false;
+        });
+        return;
+      }
+      setState(() {
+        sessionId = response.sessionId;
+      });
+      addChat([AnswerField(response.text)]);
+    } on Exception catch (_) {
+    } finally {
+      setState(() {
+        blocked = false;
+      });
+    }
   }
 
   int getCount() {
