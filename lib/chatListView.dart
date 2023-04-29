@@ -39,7 +39,7 @@ class _ChatListViewState extends State<ChatListView>
     return Stack(
       children: [
         Container(
-          margin: EdgeInsets.only(bottom: inputHeight),
+          margin: EdgeInsets.only(bottom: inputHeight + 55),
           child: ListView(
             reverse: true,
             shrinkWrap: true,

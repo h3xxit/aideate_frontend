@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import "package:flutter/material.dart";
 import 'package:watchat_ui/Gamification.dart';
+import 'package:watchat_ui/SolutionView.dart';
 import 'package:watchat_ui/chatListView.dart';
 import 'package:watchat_ui/dashboard.dart';
 
@@ -15,7 +16,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  List<Widget> tabs = [Dashboard(), ChatListView(), ChatListView()];
+  List<Widget> tabs = [Dashboard(), ChatListView(), SolutionView()];
   int selectedTab = 2;
 
   void setSelectedTab(int tabNumber) {
