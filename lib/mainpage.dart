@@ -36,19 +36,20 @@ class _MainPageState extends State<MainPage> {
       ),
       Row(
         children: [
-          Flexible(
-            flex: (MediaQuery.of(context).size.width < 600 ? 0 : 20),
-            child: Menu(setSelectedTab)
-          ),
-          Flexible(
-            flex: 55,
-            child: tabs[selectedTab],
-          ),
-          Flexible(
-            flex: (MediaQuery.of(context).size.width < 600 ? 0 : 25),
-            child: Gamification(),
-          )
-        ],
+              Flexible(flex: 20, child: Menu(setSelectedTab)),
+              Flexible(
+                flex: (selectedTab == 1 ? 55 : 80),
+                child: tabs[selectedTab],
+              ),
+            ] +
+            (selectedTab == 1
+                ? [
+                    const Flexible(
+                      flex: 25,
+                      child: Gamification(),
+                    )
+                  ]
+                : []),
       ),
     ]);
   }
