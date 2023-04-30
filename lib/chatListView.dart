@@ -159,11 +159,13 @@ class _ChatListViewState extends State<ChatListView>
     });
     for(ConversationMessage msg in history){
       if(!msg.text.startsWith("Using the above information collected about the business, export the use case where AI can be applied that you think would ")){
+        if(!msg.text.startsWith("{")){
         if(msg.role == "user"){
-        addChat([QuestionText(msg.text)]);
-      } else {
-        addChat([AnswerField(msg.text)]);
-      }
+          addChat([QuestionText(msg.text)]);
+        } else {
+          addChat([AnswerField(msg.text)]);
+        }
+        }
       }
     }
   }

@@ -18,7 +18,7 @@ class SolutionView extends StatefulWidget {
 class _SolutionViewState extends State<SolutionView> {
   List<Widget> childList = [];
 
-  boolean button_loading = false;
+  bool button_loading = false;
 
   @override
   void initState() {
