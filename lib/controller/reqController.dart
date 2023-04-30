@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:watchat_ui/common/MessageDto.dart';
 import 'package:http/http.dart' as http;
+import 'package:watchat_ui/common/Solution.dart';
 
 class ReqController {
   //static String apiURL = "http://localhost:8080";
@@ -52,10 +53,10 @@ class ReqController {
     }
   }
 
-  static Future<Object?> getSolution(int sessionId) async {
+  static Future<Solution?> getSolution(int sessionId) async {
     late final http.Response response;
     try {
-      response = await http.get(Uri.parse('$apiURL/generate-solution?sessionID=$sessionId'),
+      response = await http.get(Uri.parse('$apiURL/generate-solution?sessionId=$sessionId'),
           headers: <String, String>{
             'Content-Type': 'application/json',
           });
@@ -68,7 +69,7 @@ class ReqController {
       dynamic res =
       json.decode(const Utf8Decoder().convert(response.bodyBytes));
 
-      return res;
+      return Solution(res["problem"] , res["description"] , res["analysis"] , res["risks"] , res["data"] );
     } else {
       return null;
     }
@@ -77,7 +78,7 @@ class ReqController {
   static Future<int?> getRating(int sessionId) async {
     late final http.Response response;
     try {
-      response = await http.get(Uri.parse('$apiURL/generate-solution?sessionID=$sessionId'),
+      response = await http.get(Uri.parse('$apiURL/generate-solution?sessionId=$sessionId'),
           headers: <String, String>{
             'Content-Type': 'text/plain',
           });
