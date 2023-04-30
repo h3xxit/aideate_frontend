@@ -67,9 +67,13 @@ class ReqController {
     }
 
     if (response.statusCode == 200) {
-      dynamic res =
+      dynamic res; 
+      try{
+      res =
       json.decode(const Utf8Decoder().convert(response.bodyBytes));
-
+      }catch (e){
+        return Solution("Something went wrong", "Error", "Error" , "Error", "Error");
+      }
       return Solution(res["problem"] , res["description"] , res["analysis"] , res["risks"] , res["data"] );
     } else {
       return null;
