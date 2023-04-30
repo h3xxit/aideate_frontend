@@ -6,8 +6,8 @@ import 'package:http/http.dart' as http;
 import 'package:watchat_ui/common/Solution.dart';
 
 class ReqController {
-  //static String apiURL = "http://localhost:8080";
-  static String apiURL = "https://aideate.herokuapp.com";
+  static String apiURL = "http://localhost:8080";
+  //static String apiURL = "https://aideate.herokuapp.com";
 
   static Future<MessageDto?> initConsultant() async {
     late final http.Response response;
@@ -94,6 +94,25 @@ class ReqController {
 
     if (response.statusCode == 200) {
       return int.parse(const Utf8Decoder().convert(response.bodyBytes));
+    } else {
+      return null;
+    }
+  }
+
+  static Future<double?> getAvgRating(int sessionId) async {
+    late final http.Response response;
+    try {
+      response = await http.get(Uri.parse('$apiURL/get-average?sessionId=$sessionId'),
+          headers: <String, String>{
+            'Content-Type': 'text/plain',
+          });
+    } catch (e) {
+      print(e);
+      return null;
+    }
+
+    if (response.statusCode == 200) {
+      return double.parse(const Utf8Decoder().convert(response.bodyBytes));
     } else {
       return null;
     }

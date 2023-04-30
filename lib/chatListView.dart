@@ -15,8 +15,11 @@ class ChatListView extends StatefulWidget {
   int count = 0;
   final void Function(int) changeSessionId;
   final void Function(void Function(int?)) setReloadFunction;
+  final void Function() notifyRatingChange;
 
-  ChatListView(this.sessionId, this.changeSessionId, this.setReloadFunction, {super.key});
+  ChatListView(this.sessionId, this.changeSessionId, this.setReloadFunction,
+      this.notifyRatingChange,
+      {super.key});
 
   @override
   State<ChatListView> createState() => _ChatListViewState();
@@ -42,7 +45,7 @@ class _ChatListViewState extends State<ChatListView>
       print("Initialized consultant");
       initializeConsultant();
       initialized = true;
-    } else if(initialized == false){
+    } else if (initialized == false) {
       print("Called refresh");
       refreshChat(widget.sessionId);
       initialized = true;
@@ -150,20 +153,22 @@ class _ChatListViewState extends State<ChatListView>
   }
 
   void refreshChat(int? sessionId) async {
-    if(sessionId == null) return;
-    List<ConversationMessage>? history = await ReqController.restoreConversation(sessionId!);
-    if(history == null) return;
+    if (sessionId == null) return;
+    List<ConversationMessage>? history =
+        await ReqController.restoreConversation(sessionId!);
+    if (history == null) return;
     print(history.length);
     setState(() {
       childList.clear();
     });
-    for(ConversationMessage msg in history){
-      if(!msg.text.startsWith("Using the above information collected about the business, export the use case where AI can be applied that you think would ")){
-        if(msg.role == "user"){
-        addChat([QuestionText(msg.text)]);
-      } else {
-        addChat([AnswerField(msg.text)]);
-      }
+    for (ConversationMessage msg in history) {
+      if (!msg.text.startsWith(
+          "Using the above information collected about the business, export the use case where AI can be applied that you think would ")) {
+        if (msg.role == "user") {
+          addChat([QuestionText(msg.text)]);
+        } else {
+          addChat([AnswerField(msg.text)]);
+        }
       }
     }
   }
@@ -229,7 +234,8 @@ class _ChatListViewState extends State<ChatListView>
       await Future.delayed(const Duration(milliseconds: 1000));
       if (response == null) {
         addChat([
-          AnswerField("There seems to have been a problem, please repeat your answer")
+          AnswerField(
+              "There seems to have been a problem, please repeat your answer")
         ]);
         setState(() {
           blocked = false;
@@ -238,8 +244,12 @@ class _ChatListViewState extends State<ChatListView>
       }
       widget.changeSessionId(response.sessionId);
       addChat([AnswerField(response.text)]);
+      setState(() {
+        blocked = false;
+      });
+      print(await ReqController.getRating(response.sessionId));
+      widget.notifyRatingChange();
     } on Exception catch (_) {
-    } finally {
       setState(() {
         blocked = false;
       });
@@ -312,6 +322,7 @@ class _AnswerFieldState extends State<AnswerField> {
 // ignore: must_be_immutable
 class QuestionText extends StatefulWidget {
   String questionText;
+  int? rating;
 
   QuestionText(this.questionText, {super.key});
 
@@ -329,12 +340,13 @@ class _QuestionTextState extends State<QuestionText> {
         child: Text(
           widget.questionText,
           style: const TextStyle(
-              color: Colors.black,
-              fontFamily: "Lato",
-              decoration: TextDecoration.none,
-              fontSize: 20,
+            color: Colors.black,
+            fontFamily: "Lato",
+            decoration: TextDecoration.none,
+            fontSize: 20,
+          ),
         ),
       ),
-    ));
+    );
   }
 }

@@ -19,18 +19,28 @@ class _MainPageState extends State<MainPage> {
   int selectedTab = 1;
   int? sessionId;
   void Function(int?)? refreshChat;
+  void Function()? ratingListener;
 
   Widget tabs(int selected) {
     switch (selected) {
       case 0:
         return Dashboard();
       case 1:
-        return ChatListView(sessionId, setSessionId, setRefreshChat);
+        return ChatListView(sessionId, setSessionId, setRefreshChat, notifyRatingChange);
       case 2:
         return SolutionView(sessionId);
       default:
         print("Something went wrong when selecting the tab");
-        return ChatListView(sessionId, setSessionId, setRefreshChat);
+        return ChatListView(sessionId, setSessionId, setRefreshChat, notifyRatingChange);
+    }
+  }
+
+  void setRatingChangeListener(void Function() listener) {
+    ratingListener = listener;
+  }
+  void notifyRatingChange(){
+    if(ratingListener != null){
+      ratingListener!();
     }
   }
 
@@ -84,9 +94,9 @@ class _MainPageState extends State<MainPage> {
             ] +
             (selectedTab == 1
                 ? [
-                    const Flexible(
+                    Flexible(
                       flex: 25,
-                      child: Gamification(),
+                      child: Gamification(sessionId, setRatingChangeListener),
                     )
                   ]
                 : []),

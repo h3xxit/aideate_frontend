@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:watchat_ui/common/Score.dart';
 
+import 'controller/reqController.dart';
+
 class Gamification extends StatefulWidget {
-  const Gamification({Key? key}) : super(key: key);
+  const Gamification(this.sessionId, this.setRatingListener, {Key? key}) : super(key: key);
+  final void Function(void Function()) setRatingListener;
+  final int? sessionId;
 
   @override
   _GamificationState createState() => _GamificationState();
@@ -10,7 +14,26 @@ class Gamification extends StatefulWidget {
 
 class _GamificationState extends State<Gamification> {
   //List<Score> topThree;
-  double avgScore = 7.93;
+  double avgScore = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.setRatingListener(ratingChanged);
+  }
+
+  void ratingChanged() async {
+    try {
+      print("Rating changed");
+      if (widget.sessionId == null) return;
+      double? response = await ReqController.getAvgRating(widget.sessionId!);
+      if(response == null) return;
+      setState(() {
+        avgScore = response;
+      });
+    } on Exception catch (_) {
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +66,7 @@ class _GamificationState extends State<Gamification> {
               alignment: Alignment.center,
               children: [
                 Text(
-                  "${(avgScore * 10).round()}%",
+                  "${(avgScore).round()}%",
                   style: const TextStyle(
                       color: Color.fromARGB(255, 86, 193, 245),
                       fontWeight: FontWeight.bold,
@@ -54,7 +77,7 @@ class _GamificationState extends State<Gamification> {
                   width: 150,
                   height: 150,
                   child: CircularProgressIndicator(
-                    value: avgScore / 10,
+                    value: avgScore / 100,
                     strokeWidth: 30,
                     color: const Color.fromARGB(255, 86, 193, 245),
                   ),
