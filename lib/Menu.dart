@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:universal_html/html.dart' as html;
 
-class Menu extends StatelessWidget {
-  const Menu(this.changePage, {Key? key}) : super(key: key);
+class Menu extends StatefulWidget {
+  const Menu(this.sessionId, this.changeSession, this.changePage, {Key? key})
+      : super(key: key);
 
   final void Function(int) changePage;
+  final void Function(int) changeSession;
+  final int? sessionId;
+
+  @override
+  State<Menu> createState() => _MenuState();
+}
+
+class _MenuState extends State<Menu> {
+  final TextEditingController txtController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -68,24 +79,74 @@ class Menu extends StatelessWidget {
           child: Column(
             children: [
               GestureDetector(
-                onTap: () {changePage(0); print("Switched");},
-                child: MenuItem(icon: Icons.power_settings_new, text: "Dashboard"),
+                onTap: () {
+                  widget.changePage(0);
+                  print("Switched");
+                },
+                child:
+                    MenuItem(icon: Icons.power_settings_new, text: "Dashboard"),
               ),
               GestureDetector(
-                onTap: () {changePage(1); print("Switched");},
+                onTap: () {
+                  widget.changePage(1);
+                  print("Switched");
+                },
                 child: MenuItem(icon: Icons.chat_bubble_rounded, text: "Chats"),
               ),
               GestureDetector(
-                onTap: () {changePage(2); print("Switched");},
+                onTap: () {
+                  widget.changePage(2);
+                  print("Switched");
+                },
                 child: MenuItem(icon: Icons.check_box, text: "Solution"),
               ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 80),
+          child: Column(
+            children: [
               GestureDetector(
-                onTap: () {},
-                child: MenuItem(icon: Icons.settings, text: "Settings"),
+                onTap: () {
+                  html.window.location.reload();
+                },
+                child: MenuItem(
+                    icon: Icons.query_builder,
+                    text: "Session: ${widget.sessionId ?? 'None'}"),
               ),
               GestureDetector(
                 onTap: () {},
-                child: MenuItem(icon: Icons.query_builder, text: "History"),
+                child: MenuItem(
+                    icon: Icons.query_builder, text: "Reload session:"),
+              ),
+              Container(
+                width: 80,
+                height: 20,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: SizedBox(
+                    height: 20,
+                    child: TextField(
+                      controller: txtController,
+                      style: const TextStyle(
+                          color: Colors.black,
+                          fontFamily: "Lato",
+                          decoration: TextDecoration.none,
+                          fontSize: 10),
+                      decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "Session Id",
+                          hintStyle: TextStyle(
+                              color: Colors.black,
+                              fontFamily: "Lato",
+                              decoration: TextDecoration.none,
+                              fontSize: 10),
+                          filled: true,
+                          fillColor: Colors.white),
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
@@ -98,7 +159,7 @@ class Menu extends StatelessWidget {
 class MenuItem extends StatefulWidget {
   const MenuItem({required this.icon, required this.text, Key? key})
       : super(key: key);
-  final IconData icon;
+  final IconData? icon;
   final String text;
 
   @override
@@ -144,4 +205,3 @@ class _MenuItemState extends State<MenuItem> {
     );
   }
 }
-

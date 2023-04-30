@@ -29,6 +29,7 @@ class _MainPageState extends State<MainPage> {
       case 2:
         return SolutionView(sessionId);
       default:
+        print("Something went wrong when selecting the tab");
         return ChatListView(sessionId, setSessionId);
     }
   }
@@ -60,7 +61,7 @@ class _MainPageState extends State<MainPage> {
       ),
       Row(
         children: [
-              Flexible(flex: 20, child: Menu(setSelectedTab)),
+              Flexible(flex: 20, child: Menu(sessionId, setSessionId, setSelectedTab)),
               Flexible(
                 flex: (selectedTab == 1 ? 55 : 80),
                 child: tabs(selectedTab),

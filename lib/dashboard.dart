@@ -68,7 +68,7 @@ class _DashboardState extends State<Dashboard> {
         crossAxisCount: 3,
         crossAxisSpacing: 16,
         mainAxisSpacing: 16,
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16),
         children: [
           buildImageContainer("/images/employees-widget.png", 0),
           buildImageContainer("/images/report-widget.png", 1),
