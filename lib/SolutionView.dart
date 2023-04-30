@@ -9,7 +9,7 @@ import 'design/fontSizes.dart';
 class SolutionView extends StatefulWidget {
   const SolutionView(this.sessionId, {super.key});
   final int? sessionId;
-  
+
   @override
   State<SolutionView> createState() => _SolutionViewState();
 }

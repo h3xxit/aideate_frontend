@@ -5,8 +5,8 @@ import 'package:watchat_ui/common/MessageDto.dart';
 import 'package:http/http.dart' as http;
 
 class ReqController {
-  //static String apiURL = "http://localhost:8080";
-  static String apiURL = "https://aideate.herokuapp.com";
+  static String apiURL = "http://localhost:8080";
+  //static String apiURL = "https://aideate.herokuapp.com";
 
   static Future<MessageDto?> initConsultant() async {
     late final http.Response response;
@@ -99,7 +99,7 @@ class ReqController {
     try {
       response = await http.get(Uri.parse('$apiURL/restore-session?sessionId=$sessionId'),
           headers: <String, String>{
-            'Content-Type': 'text/plain',
+            'Content-Type': 'application/json',
           });
     } catch (e) {
       print(e);
@@ -112,7 +112,7 @@ class ReqController {
 
       List<ConversationMessage> list = [];
       for(dynamic entry in res){
-        list.add(ConversationMessage(entry["text"], entry["role"]));
+        list.add(ConversationMessage(entry["content"], entry["role"]));
       }
       return list;
     } else {
