@@ -1,5 +1,3 @@
-
-
 class MessageDto {
   String text;
   int sessionId;
