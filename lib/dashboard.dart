@@ -13,7 +13,7 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   List<bool> _isHoveringList = List.generate(6, (index) => false);
 
-  Widget buildImageContainer(String assetPath, int index) {
+  Widget buildImageContainer(String url, int index) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       onEnter: (_) {
@@ -45,7 +45,7 @@ class _DashboardState extends State<Dashboard> {
           child: Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(assetPath),
+                image: NetworkImage(url),
                 fit: BoxFit.cover,
               ),
             ),
@@ -70,12 +70,12 @@ class _DashboardState extends State<Dashboard> {
         mainAxisSpacing: 16,
         padding: EdgeInsets.all(16),
         children: [
-          buildImageContainer("/images/employees-widget.png", 0),
-          buildImageContainer("/images/report-widget.png", 1),
-          buildImageContainer("/images/automation-widget.png", 2),
-          buildImageContainer("/images/notes-widget.png", 3),
-          buildImageContainer("/images/positivity-widget.png", 4),
-          buildImageContainer("/images/messages-widget.png", 5),
+          buildImageContainer("https://cdn.discordapp.com/attachments/1101777727679365180/1102076961511182457/employees-widget.png", 0),
+          buildImageContainer("https://cdn.discordapp.com/attachments/1101777727679365180/1102076961867714570/report-widget.png", 1),
+          buildImageContainer("https://cdn.discordapp.com/attachments/1101777727679365180/1102076962505244793/automation-widget.png", 2),
+          buildImageContainer("https://cdn.discordapp.com/attachments/1101777727679365180/1102076963289567282/notes-widget.png", 3),
+          buildImageContainer("https://cdn.discordapp.com/attachments/1101777727679365180/1102076969581039616/positivity-widget.png", 4),
+          buildImageContainer("https://cdn.discordapp.com/attachments/1101777727679365180/1102076970029826049/messages-widget.png", 5),
         ],
       ),
     );

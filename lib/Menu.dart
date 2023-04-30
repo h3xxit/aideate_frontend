@@ -123,7 +123,7 @@ class _MenuState extends State<Menu> {
                                 html.window.location.reload();
                               },
                               child: MenuItem(
-                                  icon: Icons.query_builder,
+                                  icon: Icons.refresh,
                                   text:
                                       "Session: ${widget.sessionId ?? 'None'}"),
                             ),
@@ -155,7 +155,7 @@ class _MenuState extends State<Menu> {
                                         fontSize: 14),
                                     decoration: const InputDecoration(
                                         border: InputBorder.none,
-                                        hintText: "New Id",
+                                        hintText: "Old Id",
                                         hintStyle: TextStyle(
                                             color: Colors.black,
                                             fontFamily: "Lato",

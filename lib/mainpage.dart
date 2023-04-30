@@ -16,13 +16,12 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-
   int selectedTab = 1;
   int? sessionId;
   void Function(int?)? refreshChat;
 
   Widget tabs(int selected) {
-    switch(selected){
+    switch (selected) {
       case 0:
         return Dashboard();
       case 1:
@@ -35,15 +34,15 @@ class _MainPageState extends State<MainPage> {
     }
   }
 
-  void setRefreshChat(void Function(int?) refreshChat){
-      this.refreshChat = refreshChat;
+  void setRefreshChat(void Function(int?) refreshChat) {
+    this.refreshChat = refreshChat;
   }
 
   void restoreSession(int sessionId) {
     setState(() {
       this.sessionId = sessionId;
     });
-    if(refreshChat != null){
+    if (refreshChat != null) {
       refreshChat!(sessionId);
     }
   }
@@ -56,7 +55,7 @@ class _MainPageState extends State<MainPage> {
 
   void setSelectedTab(int tabNumber) {
     setState(() {
-      if(sessionId == null && selectedTab == 2) {
+      if (sessionId == null && selectedTab == 2) {
         selectedTab = 1;
       } else {
         selectedTab = tabNumber;
@@ -68,14 +67,16 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Stack(children: [
       SizedBox.expand(
-        child: Image.asset(
-          "images/wallpaper.png",
-          fit: BoxFit.cover,
-        ),
-      ),
+          child: Image.network(
+        "https://cdn.discordapp.com/attachments/1101777727679365180/1101885768877756456/Screenshot_2023-04-29_at_10.09.54.png",
+        fit: BoxFit.cover,
+      )),
       Row(
         children: [
-              Flexible(flex: 20, child: Menu(sessionId, selectedTab, setSessionId, setSelectedTab, restoreSession)),
+              Flexible(
+                  flex: 20,
+                  child: Menu(sessionId, selectedTab, setSessionId,
+                      setSelectedTab, restoreSession)),
               Flexible(
                 flex: (selectedTab == 1 ? 55 : 80),
                 child: tabs(selectedTab),
