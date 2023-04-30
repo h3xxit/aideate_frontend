@@ -8,12 +8,15 @@ import 'package:watchat_ui/controller/reqController.dart';
 import 'package:watchat_ui/design/fontSizes.dart';
 import 'package:watchat_ui/widgets/chatMessage.dart';
 
+import 'common/ConversationMessage.dart';
+
 class ChatListView extends StatefulWidget {
   final int? sessionId;
   int count = 0;
   final void Function(int) changeSessionId;
+  final void Function(void Function(int?)) setReloadFunction;
 
-  ChatListView(this.sessionId, this.changeSessionId, {super.key});
+  ChatListView(this.sessionId, this.changeSessionId, this.setReloadFunction, {super.key});
 
   @override
   State<ChatListView> createState() => _ChatListViewState();
@@ -24,14 +27,25 @@ class _ChatListViewState extends State<ChatListView>
   List<Widget> childList = [];
   final TextEditingController txtController = TextEditingController();
   String hintText = "Insert text here to start getting recommendations...";
-  bool startedConversation = false;
   bool blocked = false;
+  bool initialized = false;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.setReloadFunction(refreshChat);
+  }
 
   @override
   Widget build(BuildContext context) {
-    if (!startedConversation) {
+    if (widget.sessionId == null) {
+      print("Initialized consultant");
       initializeConsultant();
-      startedConversation = true;
+      initialized = true;
+    } else if(initialized == false){
+      print("Called refresh");
+      refreshChat(widget.sessionId);
+      initialized = true;
     }
 
     double inputHeight = FontSizes.flexibleEESmall(context) * 2.7;
@@ -132,6 +146,23 @@ class _ChatListViewState extends State<ChatListView>
       setState(() {
         childList = tmp;
       });
+    }
+  }
+
+  void refreshChat(int? sessionId) async {
+    if(sessionId == null) return;
+    List<ConversationMessage>? history = await ReqController.restoreConversation(sessionId!);
+    if(history == null) return;
+    print(history.length);
+    setState(() {
+      childList.clear();
+    });
+    for(ConversationMessage msg in history){
+      if(msg.role == "user"){
+        addChat([QuestionText(msg.text)]);
+      } else {
+        addChat([AnswerField(msg.text)]);
+      }
     }
   }
 
