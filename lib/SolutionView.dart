@@ -18,6 +18,8 @@ class SolutionView extends StatefulWidget {
 class _SolutionViewState extends State<SolutionView> {
   List<Widget> childList = [];
 
+  var button_text = "Reload/ Generate Solution from the information gathered so far";
+
   @override
   void initState() {
     super.initState();
@@ -44,7 +46,10 @@ class _SolutionViewState extends State<SolutionView> {
               child: TextButton(
                 onPressed: () async {
 
-                  print("what is happending??");
+                  setState(() {
+                    button_text = 'Generating the solution, please have some patience!';
+                  });
+
                   Solution? sol;
 
                   /*sol = Solution(
@@ -69,6 +74,7 @@ class _SolutionViewState extends State<SolutionView> {
                   if (this.mounted) {
                     setState(() {
                       childList = tmp;
+                      button_text = "Reload/ Generate Solution from the information gathered so far";
                     });
                   };
                   // Add your onPressed function here
@@ -79,8 +85,7 @@ class _SolutionViewState extends State<SolutionView> {
                     Icon(Icons.refresh, color: Colors.white), // Add reload icon
                     SizedBox(
                         width: 8), // Add some spacing between icon and text
-                    Text(
-                      'Reload/ Generate Solution from the information gathered so far',
+                    Text(button_text,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -129,15 +134,15 @@ class SolutionText extends StatelessWidget {
 
   IconData getIcon() {
     switch (title) {
-      case "Problem":
+      case "Identified Problem":
         return Icons.error_outline;
-      case "Description":
+      case "Description how AI can help":
         return Icons.description;
-      case "Analysis":
+      case "Detailed Analysis":
         return Icons.analytics_outlined;
-      case "Risks":
+      case "Involved Risks":
         return Icons.warning_amber_outlined;
-      case "Data":
+      case "Required Data":
         return Icons.data_usage;
       default:
         return Icons.help_outline;
