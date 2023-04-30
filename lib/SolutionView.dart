@@ -18,7 +18,8 @@ class SolutionView extends StatefulWidget {
 class _SolutionViewState extends State<SolutionView> {
   List<Widget> childList = [];
 
-  var button_text = "Reload/ Generate Solution from the information gathered so far";
+  var button_text =
+      "Reload/ Generate Solution from the information gathered so far";
 
   @override
   void initState() {
@@ -45,9 +46,9 @@ class _SolutionViewState extends State<SolutionView> {
               ),
               child: TextButton(
                 onPressed: () async {
-
                   setState(() {
-                    button_text = 'Generating the solution, please have some patience! It might take up to two minutes!';
+                    button_text =
+                        'Generating the solution, please have some patience! It might take up to two minutes!';
                   });
 
                   Solution? sol;
@@ -59,22 +60,32 @@ class _SolutionViewState extends State<SolutionView> {
                       "Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.",
                       "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?");*/
 
-                  if(widget.sessionId == null){
+                  if (widget.sessionId == null) {
                     return;
                   }
                   sol = await ReqController.getSolution(widget.sessionId!);
-                   List<Widget> tmp = [
-                    SolutionText(title: "Required Data", content: sol!.data),
-                      SolutionText(title: "Involved Risks", content: sol.risks), 
-                      SolutionText(title: "Detailed Analysis", content: sol.analysis),
+                  List<Widget> tmp = [];
+                  if(sol!.risks == "Error"){
+                    tmp = [SolutionText(title: "Not enough data!", content: "Not enough data to generate solutions. Please talk to the consultant more")];
+                  } else {
+                    tmp = [
+                      SolutionText(title: "Required Data", content: sol!.data),
+                      SolutionText(title: "Involved Risks", content: sol.risks),
                       SolutionText(
-                            title: "Description how AI can help", content: sol.description),
-                        SolutionText(title: "Identified Problem", content: sol.problem),
-                      ];
+                          title: "Detailed Analysis", content: sol.analysis),
+                      SolutionText(
+                          title: "Description how AI can help",
+                          content: sol.description),
+                      SolutionText(
+                          title: "Identified Problem", content: sol.problem),
+                    ];
+                  }
+
                   if (this.mounted) {
                     setState(() {
                       childList = tmp;
-                      button_text = "Reload/ Generate Solution from the information gathered so far";
+                      button_text =
+                          "Reload/ Generate Solution from the information gathered so far";
                     });
                   };
                   // Add your onPressed function here
@@ -85,7 +96,8 @@ class _SolutionViewState extends State<SolutionView> {
                     Icon(Icons.refresh, color: Colors.white), // Add reload icon
                     SizedBox(
                         width: 8), // Add some spacing between icon and text
-                    Text(button_text,
+                    Text(
+                      button_text,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
