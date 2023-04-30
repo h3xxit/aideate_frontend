@@ -3,11 +3,12 @@ import 'dart:convert';
 import 'package:watchat_ui/common/ConversationMessage.dart';
 import 'package:watchat_ui/common/MessageDto.dart';
 import 'package:http/http.dart' as http;
+import 'package:watchat_ui/common/Rating.dart';
 import 'package:watchat_ui/common/Solution.dart';
 
 class ReqController {
-  //static String apiURL = "http://localhost:8080";
-  static String apiURL = "https://aideate.herokuapp.com";
+  static String apiURL = "http://localhost:8080";
+  //static String apiURL = "https://aideate.herokuapp.com";
 
   static Future<MessageDto?> initConsultant() async {
     late final http.Response response;
@@ -99,7 +100,7 @@ class ReqController {
     }
   }
 
-  static Future<double?> getAvgRating(int sessionId) async {
+  static Future<Rating?> getAvgRating(int sessionId) async {
     late final http.Response response;
     try {
       response = await http.get(Uri.parse('$apiURL/get-average?sessionId=$sessionId'),
@@ -112,7 +113,10 @@ class ReqController {
     }
 
     if (response.statusCode == 200) {
-      return double.parse(const Utf8Decoder().convert(response.bodyBytes));
+      dynamic res =
+        json.decode(const Utf8Decoder().convert(response.bodyBytes));
+
+      return  Rating(res["avg"], res["latest"]);
     } else {
       return null;
     }

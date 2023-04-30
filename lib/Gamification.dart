@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:watchat_ui/common/Rating.dart';
 import 'package:watchat_ui/common/Score.dart';
 
 import 'controller/reqController.dart';
 
 class Gamification extends StatefulWidget {
-  const Gamification(this.sessionId, this.setRatingListener, {Key? key}) : super(key: key);
+  const Gamification(this.sessionId, this.setRatingListener, {Key? key})
+      : super(key: key);
   final void Function(void Function()) setRatingListener;
   final int? sessionId;
 
@@ -15,6 +17,7 @@ class Gamification extends StatefulWidget {
 class _GamificationState extends State<Gamification> {
   //List<Score> topThree;
   double avgScore = 0;
+  int latestScore = 0;
 
   @override
   void initState() {
@@ -26,17 +29,20 @@ class _GamificationState extends State<Gamification> {
     try {
       print("Rating changed");
       if (widget.sessionId == null) return;
-      double? response = await ReqController.getAvgRating(widget.sessionId!);
-      if(response == null) return;
+      Rating? response = await ReqController.getAvgRating(widget.sessionId!);
+      if (response == null) return;
       setState(() {
-        avgScore = response;
+        avgScore = response.avg;
+        latestScore = response.latest;
       });
-    } on Exception catch (_) {
-    }
+    } on Exception catch (_) {}
   }
 
   @override
   Widget build(BuildContext context) {
+    if(widget.sessionId != null && avgScore == 0) {
+      ratingChanged();
+    }
     return Column(
       children: [
         Column(
@@ -52,9 +58,9 @@ class _GamificationState extends State<Gamification> {
                     fontSize: 15),
               ),
             ),
-            LeaderboardEntry("Juan Garcia", 15),
-            LeaderboardEntry("You", 13),
-            LeaderboardEntry("Ali Raza", 11),
+            LeaderboardEntry("Juan Garcia", 95),
+            LeaderboardEntry("You", 90),
+            LeaderboardEntry("Ali Raza", 87),
           ],
         ),
         Padding(
@@ -66,12 +72,13 @@ class _GamificationState extends State<Gamification> {
               alignment: Alignment.center,
               children: [
                 Text(
-                  "${(avgScore).round()}%",
+                  "Avg Rating\n${(avgScore).round()}%",
+                  textAlign: TextAlign.center,
                   style: const TextStyle(
                       color: Color.fromARGB(255, 86, 193, 245),
                       fontWeight: FontWeight.bold,
                       fontFamily: "Lato",
-                      fontSize: 40),
+                      fontSize: 20),
                 ),
                 SizedBox(
                   width: 150,
@@ -86,17 +93,45 @@ class _GamificationState extends State<Gamification> {
             ),
           ),
         ),
-        
         Padding(
-          padding: const EdgeInsets.only(top: 40), // Add padding here
-          child: Column(
-            children: const [
-              Tips("Tip 1: Emails x AI"),
-              Tips("Tip 2: Process Optimisation"),
-              Tips("Tip 3: Family scheduling")
-           ],
-          )
+          padding: const EdgeInsets.only(top: 40),
+          child: SizedBox(
+            width: 150,
+            height: 150,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Text(
+                  "Latest\n${(latestScore).round()}%",
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                      color: Color.fromARGB(255, 86, 193, 245),
+                      fontWeight: FontWeight.bold,
+                      fontFamily: "Lato",
+                      fontSize: 20),
+                ),
+                SizedBox(
+                  width: 150,
+                  height: 150,
+                  child: CircularProgressIndicator(
+                    value: latestScore / 100,
+                    strokeWidth: 30,
+                    color: const Color.fromARGB(255, 86, 193, 245),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
+        Padding(
+            padding: const EdgeInsets.only(top: 40), // Add padding here
+            child: Column(
+              children: const [
+                Tips("Tip 1: Emails x AI"),
+                Tips("Tip 2: Process Optimisation"),
+                Tips("Tip 3: Family scheduling")
+              ],
+            )),
       ],
     );
   }
@@ -186,7 +221,7 @@ class LeaderboardEntry extends StatelessWidget {
             ),
           ),
           Text(
-            "$points pts",
+            "$points%",
             style: const TextStyle(
                 color: Colors.black54,
                 fontWeight: FontWeight.bold,
