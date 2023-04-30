@@ -18,7 +18,7 @@ class SolutionView extends StatefulWidget {
 class _SolutionViewState extends State<SolutionView> {
   List<Widget> childList = [];
 
-  bool button_loading = false;
+  var button_text = "Reload/ Generate Solution from the information gathered so far";
 
   @override
   void initState() {
@@ -46,8 +46,10 @@ class _SolutionViewState extends State<SolutionView> {
               child: TextButton(
                 onPressed: () async {
 
-                  button_loading = true;
-                  
+                  setState(() {
+                    button_text = 'Generating the solution, please have some patience!';
+                  });
+
                   Solution? sol;
 
                   /*sol = Solution(
@@ -72,9 +74,9 @@ class _SolutionViewState extends State<SolutionView> {
                   if (this.mounted) {
                     setState(() {
                       childList = tmp;
+                      button_text = "Reload/ Generate Solution from the information gathered so far";
                     });
                   };
-                  button_loading = false;
                   // Add your onPressed function here
                 },
                 child: Row(
@@ -83,8 +85,7 @@ class _SolutionViewState extends State<SolutionView> {
                     Icon(Icons.refresh, color: Colors.white), // Add reload icon
                     SizedBox(
                         width: 8), // Add some spacing between icon and text
-                    Text(button_loading?
-                      'Reload/ Generate Solution from the information gathered so far':'Generating the solution, please have some patience!',
+                    Text(button_text,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
