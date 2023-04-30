@@ -47,7 +47,7 @@ class _SolutionViewState extends State<SolutionView> {
                 onPressed: () async {
 
                   setState(() {
-                    button_text = 'Generating the solution, please have some patience!';
+                    button_text = 'Generating the solution, please have some patience! It might take up to two minutes!';
                   });
 
                   Solution? sol;
