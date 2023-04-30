@@ -4,10 +4,11 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:watchat_ui/common/Solution.dart';
 import 'package:watchat_ui/widgets/chatMessage.dart';
 
+
 import 'design/fontSizes.dart';
 
 class SolutionView extends StatefulWidget {
-  const SolutionView({Key? key}) : super(key: key);
+  const SolutionView(int? sessionId, {Key? key}) : super(key: key);
 
   @override
   State<SolutionView> createState() => _SolutionViewState();
@@ -26,6 +27,7 @@ class _SolutionViewState extends State<SolutionView> {
         "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.",
         "Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.",
         "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?");
+
     childList = [
       SolutionText(title: "Problem", content: sol.problem),
       SolutionText(title: "Description", content: sol.description),
