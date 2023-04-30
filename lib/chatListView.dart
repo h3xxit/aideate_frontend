@@ -118,7 +118,7 @@ class _ChatListViewState extends State<ChatListView>
                         submitText(txtController.text);
                       },
                       child: Text(
-                        widget.sessionId?.toString() ?? "Submit",
+                        "Submit",
                         style: TextStyle(
                             color: Colors.black,
                             fontFamily: "Lato",

@@ -129,7 +129,7 @@ class _GamificationState extends State<Gamification> {
               children: const [
                 Tips("Tip 1: Emails x AI"),
                 Tips("Tip 2: Process Optimisation"),
-                Tips("Tip 3: Family scheduling")
+                Tips("Tip 3: Daily Automation with AI")
               ],
             )),
       ],

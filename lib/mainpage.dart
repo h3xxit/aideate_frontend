@@ -26,20 +26,23 @@ class _MainPageState extends State<MainPage> {
       case 0:
         return Dashboard();
       case 1:
-        return ChatListView(sessionId, setSessionId, setRefreshChat, notifyRatingChange);
+        return ChatListView(
+            sessionId, setSessionId, setRefreshChat, notifyRatingChange);
       case 2:
         return SolutionView(sessionId);
       default:
         print("Something went wrong when selecting the tab");
-        return ChatListView(sessionId, setSessionId, setRefreshChat, notifyRatingChange);
+        return ChatListView(
+            sessionId, setSessionId, setRefreshChat, notifyRatingChange);
     }
   }
 
   void setRatingChangeListener(void Function() listener) {
     ratingListener = listener;
   }
-  void notifyRatingChange(){
-    if(ratingListener != null){
+
+  void notifyRatingChange() {
+    if (ratingListener != null) {
       ratingListener!();
     }
   }
@@ -82,17 +85,27 @@ class _MainPageState extends State<MainPage> {
         fit: BoxFit.cover,
       )),
       Row(
-        children: [
-              Flexible(
-                  flex: 20,
-                  child: Menu(sessionId, selectedTab, setSessionId,
-                      setSelectedTab, restoreSession)),
+        children: <Widget>[] +
+            (MediaQuery.of(context).size.width > 600
+                ? [
+                    Flexible(
+                        flex: 20,
+                        child: Menu(sessionId, selectedTab, setSessionId,
+                            setSelectedTab, restoreSession)),
+                  ]
+                : [
+                    Flexible(
+                        flex: 6,
+                        child: Menu(sessionId, selectedTab, setSessionId,
+                            setSelectedTab, restoreSession)),
+                  ]) +
+            [
               Flexible(
                 flex: (selectedTab == 1 ? 55 : 80),
                 child: tabs(selectedTab),
               ),
             ] +
-            (selectedTab == 1
+            (selectedTab == 1 && MediaQuery.of(context).size.width > 1200
                 ? [
                     Flexible(
                       flex: 25,
