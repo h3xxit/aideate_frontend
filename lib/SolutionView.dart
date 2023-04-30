@@ -8,8 +8,9 @@ import 'package:watchat_ui/widgets/chatMessage.dart';
 import 'design/fontSizes.dart';
 
 class SolutionView extends StatefulWidget {
-  const SolutionView(this.sessionId, {Key? key}) : super(key: key);
+  const SolutionView(this.sessionId, {super.key});
   final int? sessionId;
+  
   @override
   State<SolutionView> createState() => _SolutionViewState();
 }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:watchat_ui/common/ConversationMessage.dart';
 import 'package:watchat_ui/common/MessageDto.dart';
 import 'package:http/http.dart' as http;
 import 'package:watchat_ui/common/Solution.dart';
@@ -78,7 +79,7 @@ class ReqController {
   static Future<int?> getRating(int sessionId) async {
     late final http.Response response;
     try {
-      response = await http.get(Uri.parse('$apiURL/generate-solution?sessionId=$sessionId'),
+      response = await http.get(Uri.parse('$apiURL/rate-answer?sessionId=$sessionId'),
           headers: <String, String>{
             'Content-Type': 'text/plain',
           });
@@ -89,6 +90,32 @@ class ReqController {
 
     if (response.statusCode == 200) {
       return int.parse(const Utf8Decoder().convert(response.bodyBytes));
+    } else {
+      return null;
+    }
+  }
+
+  static Future<List<ConversationMessage>?> restoreConversation(int sessionId) async {
+    late final http.Response response;
+    try {
+      response = await http.get(Uri.parse('$apiURL/restore-session?sessionId=$sessionId'),
+          headers: <String, String>{
+            'Content-Type': 'text/plain',
+          });
+    } catch (e) {
+      print(e);
+      return null;
+    }
+
+    if (response.statusCode == 200) {
+      dynamic res =
+        json.decode(const Utf8Decoder().convert(response.bodyBytes));
+
+      List<ConversationMessage> list = [];
+      for(dynamic entry in res){
+        list.add(ConversationMessage(entry["text"], entry["role"]));
+      }
+      return list;
     } else {
       return null;
     }
