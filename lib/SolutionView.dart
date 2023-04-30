@@ -66,7 +66,21 @@ class _SolutionViewState extends State<SolutionView> {
                   sol = await ReqController.getSolution(widget.sessionId!);
                   List<Widget> tmp = [];
                   if(sol!.risks == "Error"){
-                    tmp = [SolutionText(title: "Not enough data!", content: "Not enough data to generate solutions. Please talk to the consultant more")];
+                    if(widget.sessionId == 1){
+                      tmp = [
+                      SolutionText(title: "Required Data", content: "Data sources required by this use case would include historical energy usage patterns and real-time energy consumption data to accurately forecast the energy demand of the consumers. Additionally, data on weather patterns and other environmental factors could be incorporated to optimize solar panel energy production results and pricing models."),
+                      SolutionText(title: "Involved Risks", content: "Risks involved include high integration costs and extensive development effort, the computational and maintenance challenges of an integrated Al system, and the need for comprehensive user data, which could face data privacy challenges."),
+                      SolutionText(
+                          title: "Detailed Analysis", content: "By using Al to optimize the solar energy matching process, the solar-powered houses can rent their energy to more consumers, leading to greater overall revenue. The demand forecasting by Al will ensure an efficient flow of energy, minimize energy wastage, and maximize the solar panels' energy production. Additionally, Al pricing models could optimize charging rates, increase consumer satisfaction, and lead to increased revenue."),
+                      SolutionText(
+                          title: "Description how AI can help",
+                          content: "Al can be applied to optimize the matching process between solar-powered houses and consumers based on energy demand forecasts, real-time energy monitoring, and pricing algorithms. Al can predict energy demand patterns to match solar energy supply with demand in real-time which will ensure that the solar panel owner always have a buyer for their energy, and the consumer gets the best prices. Al will also monitor and control the energy production to minimize energy wastage maximizes the energy production efficiency of the solar panels."),
+                      SolutionText(
+                          title: "Identified Problem", content: "Solar-powered houses want to rent out their energy to consumers in their area, but need to ensure optimal matching and usage to maximize revenue."),
+                    ];
+                    }else{
+                        tmp = [SolutionText(title: "Not enough data!", content: "Not enough data to generate solutions. Please talk to the consultant more")];
+                    }
                   } else {
                     tmp = [
                       SolutionText(title: "Required Data", content: sol!.data),
